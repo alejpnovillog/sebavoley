@@ -64,7 +64,7 @@
       background-color: #e64d00;
     }
 
-    /* Efecto de transición circular */
+    /* Efecto de transición circular 
     #circle-transition {
       position: fixed;
       top: 50%;
@@ -77,6 +77,23 @@
       z-index: 998;
       pointer-events: none;
       transition: width 1.2s ease, height 1.2s ease, opacity 0.5s ease;
+      opacity: 0;
+    } */
+     
+
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      /* Modificado aquí: */
+      transition: width 3s ease, height 3s ease, opacity 0.5s ease; /* Todo tarda 3 segundos */
       opacity: 0;
     }
 
@@ -138,8 +155,8 @@
     // start:17.09  end: 17.13
     // start:21.59       end:22.04
     // start:23.59       end:24.04
-    // start:       end:
-    // start:       end:
+    // start:35.27       end:35.31
+    // start:36.31       end:
     // start:       end:                
     // start:       end:
     // start:       end:
@@ -208,7 +225,7 @@
           soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
           // 2. Ajustar volumen (después de un breve instante para asegurar que 'play' se procesó)
           setTimeout(() => {
-            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 50 }), '*');
+            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
             console.log("Mensajes de play y volumen enviados a SoundCloud.");
           }, 100); // 100ms de delay para setVolume
         } else {
