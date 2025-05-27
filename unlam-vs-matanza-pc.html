@@ -64,7 +64,7 @@
       background-color: #e64d00;
     }
 
-    /* Efecto de transición circular 
+    /* Efecto de transición circular */
     #circle-transition {
       position: fixed;
       top: 50%;
@@ -78,25 +78,7 @@
       pointer-events: none;
       transition: width 1.2s ease, height 1.2s ease, opacity 0.5s ease;
       opacity: 0;
-    } */
-
-    #circle-transition {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 0;
-      height: 0;
-      background-color: black;
-      border-radius: 50%;
-      z-index: 998;
-      pointer-events: none;
-      /* Modificado aquí: */
-      transition: width 3s ease, height 3s ease, opacity 3s ease; /* Todo tarda 3 segundos */
-      opacity: 0;
     }
-
-
 
     #circle-transition.active {
       width: 200vw;
@@ -152,6 +134,36 @@
   <!-- Carga de YouTube Player API -->
   <script src="https://www.youtube.com/player_api"></script> <!-- Eliminado espacio extra -->
   <script>
+    // start:14.46  end:14.50
+    // start:17.09  end: 17.13
+    // start:21.59       end:22.04
+    // start:23.59       end:24.04
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+
+
     const videos = [
       { start: 296, end: 305 }, { start: 478, end: 485 },
       { start: 758, end: 765 }, { start: 957, end: 963 },
@@ -210,7 +222,7 @@
       setTimeout(() => {
         if (!player) {
           player = new YT.Player('player', {
-            videoId: 'wHYzdbLzGlI',
+            videoId: 'zenALs3qSpw',
             playerVars: {
               autoplay: 1,
               controls: 1, // Podrías poner 0 si no quieres controles de YouTube visibles
@@ -228,7 +240,7 @@
            // Si el player ya existe, solo carga el primer video
            const firstVideo = videos[0];
             player.loadVideoById({
-                videoId: 'wHYzdbLzGlI',
+                videoId: 'zenALs3qSpw',
                 startSeconds: firstVideo.start,
                 endSeconds: firstVideo.end || undefined
             });
@@ -271,7 +283,7 @@
         if (currentIndex < videos.length) {
           const current = videos[currentIndex];
           player.loadVideoById({
-            videoId: 'wHYzdbLzGlI',
+            videoId: 'zenALs3qSpw',
             startSeconds: current.start,
             endSeconds: current.end || undefined
           });
@@ -280,7 +292,14 @@
             circle.classList.remove("active");
           }, 150);
         } else {
-         
+          // Opcional: Reiniciar o mostrar mensaje final
+          //currentIndex = 0; // Para reiniciar
+          //alert("✅ ¡Todos los videos han sido reproducidos!");
+          //document.getElementById("play-button").style.display = "block"; // Mostrar botón de nuevo
+          //if (soundCloudIframe && soundCloudIframe.contentWindow) {
+          //  soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+          //}
+          
           // Por ahora, solo quita la transición y muestra alerta
           circle.classList.remove("active");
           setTimeout(() => alert("✅ ¡Todos los videos han sido reproducidos!"), 200);
@@ -300,6 +319,10 @@
       }
     }
 
+    // No es ideal forzar fullscreen en touchstart sin contexto,
+    // ya que el usuario podría tocar para hacer scroll, etc.
+    // El botón 'play-button' ya lo maneja.
+    // document.body.addEventListener('touchstart', requestFullscreen, { once: true });
   </script>
 </body>
 </html>
