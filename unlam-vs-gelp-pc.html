@@ -197,7 +197,7 @@
           soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
           // 2. Ajustar volumen (después de un breve instante para asegurar que 'play' se procesó)
           setTimeout(() => {
-            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 50 }), '*');
+            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
             console.log("Mensajes de play y volumen enviados a SoundCloud.");
           }, 100); // 100ms de delay para setVolume
         } else {
