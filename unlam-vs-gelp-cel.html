@@ -6,6 +6,126 @@
   <title>UNLAM VS GELP</title>
   <style>
     /* ... (tu CSS existente sin cambios) ... */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+    }
+
+    #player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #soundcloud-player {
+      position: absolute;
+      width: 1px; /* Puede ser 0px o incluso display:none si no necesitas visual=true */
+      height: 1px;/* Puede ser 0px o incluso display:none si no necesitas visual=true */
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #play-button {
+      position: absolute;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: rgba(255, 85, 0, 0.9);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #play-button:hover {
+      background-color: #e64d00;
+    }
+
+    /* Efecto de transición circular 
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      transition: width 1.2s ease, height 1.2s ease, opacity 0.5s ease;
+      opacity: 0;
+    } */
+     
+
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      /* Modificado aquí: */
+      transition: width 3s ease, height 3s ease, opacity 0.5s ease; /* Todo tarda 3 segundos */
+      opacity: 0;
+    }
+
+
+
+    #circle-transition.active {
+      width: 200vw;
+      height: 200vh;
+      opacity: 1;
+    }
+
+    /* Contador de video */
+    #video-counter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 8px;
+      z-index: 999;
+      transition: opacity 0.4s ease;
+    }
+
+    #video-counter.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
   </style>
 </head>
 <body>
