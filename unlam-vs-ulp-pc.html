@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>UNLAM VS GELP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+    }
+
+    #player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #soundcloud-player {
+      position: absolute;
+      width: 1px; /* Puede ser 0px o incluso display:none si no necesitas visual=true */
+      height: 1px;/* Puede ser 0px o incluso display:none si no necesitas visual=true */
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #play-button {
+      position: absolute;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: rgba(255, 85, 0, 0.9);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #play-button:hover {
+      background-color: #e64d00;
+    }
+
+    /* Efecto de transición circular 
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      transition: width 1.2s ease, height 1.2s ease, opacity 0.5s ease;
+      opacity: 0;
+    } */
+     
+
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      /* Modificado aquí: */
+      transition: width 3s ease, height 3s ease, opacity 0.5s ease; /* Todo tarda 3 segundos */
+      opacity: 0;
+    }
+
+
+
+    #circle-transition.active {
+      width: 200vw;
+      height: 200vh;
+      opacity: 1;
+    }
+
+    /* Contador de video */
+    #video-counter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 8px;
+      z-index: 999;
+      transition: opacity 0.4s ease;
+    }
+
+    #video-counter.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Botón para iniciar -->
+  <button id="play-button" onclick="startExperience()">▶️ Actuación del jugador 16 de la UNLAM</button>
+
+  <!-- Contador de video -->
+  <div id="video-counter" class="hidden">
+    <span id="current-index">0</span> / <span id="total-videos">0</span>
+  </div>
+
+  <!-- Reproductor de YouTube (pantalla completa) -->
+  <div id="player"></div>
+
+  <!-- Reproductor oculto de SoundCloud -->
+  <iframe id="soundcloud-player"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false"
+    allow="autoplay">
+  </iframe>
+  <!-- Nota: cambié visual=true a visual=false y agregué otros parámetros para minimizar lo que carga el widget oculto -->
+
+
+  <!-- Efecto de transición circular -->
+  <div id="circle-transition"></div>
+
+  <!-- Carga de YouTube Player API -->
+  <script src="https://www.youtube.com/player_api"></script> <!-- Eliminado espacio extra -->
+  <script>
+    // start:2.00       end:2.07
+    // start:5.57       end: 6.03
+    // start:8.10       end:8.14
+    // start:8.40       end:8.47
+    // start:9.36       end:9.42
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:
+    // start:       end:                
+    const videos = [
+      { start: 296, end: 305 }, { start: 478, end: 485 },
+      { start: 758, end: 765 }, { start: 957, end: 963 },
+      { start: 989, end: 996 }, { start: 1117, end: 1122 },
+      { start: 1459, end: 1464 }, { start: 2040, end: 2046 },
+      { start: 2049, end: 2058 }, { start: 2133, end: 2140 },
+      { start: 2243, end: 2249 }, { start: 2252, end: 2258 },
+      { start: 2533, end: 2543 }, { start: 2570, end: 2576 },
+      { start: 3100, end: 3106 }, { start: 3589, end: 3595 },
+      { start: 3717, end: 3721 }, { start: 3802, end: 3809 },
+      { start: 4802, end: 4809 }, { start: 4866, end: 4874 }
+    ];
+
+    let currentIndex = 0;
+    let player;
+    let soundCloudIframe;
+    let totalVideos = videos.length;
+
+    function updateCounter() {
+      const currentEl = document.getElementById("current-index");
+      const totalEl = document.getElementById("total-videos");
+      if (currentEl && totalEl) {
+        currentEl.textContent = currentIndex + 1;
+        totalEl.textContent = totalVideos;
+      }
+    }
+
+    function startExperience() {
+      document.getElementById("play-button").style.display = "none";
+      requestFullscreen();
+
+      soundCloudIframe = document.getElementById("soundcloud-player");
+
+      // Intenta iniciar SoundCloud directamente con la API postMessage
+      // Esto se hace DESPUÉS de la interacción del usuario (el clic en play-button)
+      // Un pequeño timeout para dar tiempo al iframe a estar listo, aunque podría no ser estrictamente necesario
+      // ya que el iframe ya está en el DOM y cargado.
+      setTimeout(() => {
+        if (soundCloudIframe && soundCloudIframe.contentWindow) {
+          console.log("Intentando reproducir SoundCloud y ajustar volumen...");
+          // 1. Iniciar reproducción
+          soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+          // 2. Ajustar volumen (después de un breve instante para asegurar que 'play' se procesó)
+          setTimeout(() => {
+            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
+            console.log("Mensajes de play y volumen enviados a SoundCloud.");
+          }, 100); // 100ms de delay para setVolume
+        } else {
+          console.error("SoundCloud iframe o contentWindow no encontrado.");
+        }
+      }, 200); // 200ms de delay para el primer comando a SoundCloud
+
+      const circle = document.getElementById("circle-transition");
+      circle.classList.add("active");
+
+      setTimeout(() => {
+        if (!player) {
+          player = new YT.Player('player', {
+            videoId: 'CgsSpCa287o',
+            playerVars: {
+              autoplay: 1,
+              controls: 1, // Podrías poner 0 si no quieres controles de YouTube visibles
+              start: videos[0].start,
+              end: videos[0].end || undefined,
+              rel: 0,
+              fs: 1,
+              playsinline: 1 // Importante para iOS para evitar que se abra en el reproductor nativo
+            },
+            events: {
+              'onStateChange': onStateChange
+            }
+          });
+        } else {
+           // Si el player ya existe, solo carga el primer video
+           const firstVideo = videos[0];
+            player.loadVideoById({
+                videoId: 'CgsSpCa287o',
+                startSeconds: firstVideo.start,
+                endSeconds: firstVideo.end || undefined
+            });
+        }
+
+        document.getElementById("total-videos").textContent = totalVideos;
+        document.getElementById("video-counter").classList.remove("hidden");
+        updateCounter();
+
+        setTimeout(() => {
+          circle.classList.remove("active");
+        }, 150);
+      }, 1200);
+    }
+
+    function onStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        const currentVideoData = videos[currentIndex];
+        const duration = (currentVideoData.end || (currentVideoData.start + player.getDuration())) - currentVideoData.start;
+        
+        // Limpiar cualquier timeout anterior para evitar múltiples llamadas a nextVideo
+        if (window.nextVideoTimeout) {
+            clearTimeout(window.nextVideoTimeout);
+        }
+        window.nextVideoTimeout = setTimeout(nextVideo, duration * 1000);
+      }
+    }
+
+    function nextVideo() {
+      // Limpiar el timeout por si acaso se llama manualmente o por otra vía
+      if (window.nextVideoTimeout) {
+            clearTimeout(window.nextVideoTimeout);
+      }
+
+      const circle = document.getElementById("circle-transition");
+      circle.classList.add("active");
+
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < videos.length) {
+          const current = videos[currentIndex];
+          player.loadVideoById({
+            videoId: 'CgsSpCa287o',
+            startSeconds: current.start,
+            endSeconds: current.end || undefined
+          });
+          updateCounter();
+          setTimeout(() => {
+            circle.classList.remove("active");
+          }, 150);
+        } else {
+         
+          // Por ahora, solo quita la transición y muestra alerta
+          circle.classList.remove("active");
+          setTimeout(() => alert("✅ ¡Todos los videos han sido reproducidos!"), 200);
+
+        }
+      }, 1200);
+    }
+
+    function requestFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => console.log(`Error al intentar pantalla completa: ${err.message} (${err.name})`));
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    }
+
+  </script>
+</body>
+</html>
