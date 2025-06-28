@@ -248,7 +248,7 @@
       setTimeout(() => {
         if (!player) {
           player = new YT.Player('player', {
-            videoId: 'wHYzdbLzGlI',
+            videoId: 'EOACeVCXGfI',
             playerVars: {
               autoplay: 1,
               controls: 1, // Podrías poner 0 si no quieres controles de YouTube visibles
@@ -266,7 +266,7 @@
            // Si el player ya existe, solo carga el primer video
            const firstVideo = videos[0];
             player.loadVideoById({
-                videoId: 'wHYzdbLzGlI',
+                videoId: 'EOACeVCXGfI',
                 startSeconds: firstVideo.start,
                 endSeconds: firstVideo.end || undefined
             });
@@ -309,7 +309,7 @@
         if (currentIndex < videos.length) {
           const current = videos[currentIndex];
           player.loadVideoById({
-            videoId: 'wHYzdbLzGlI',
+            videoId: 'EOACeVCXGfI',
             startSeconds: current.start,
             endSeconds: current.end || undefined
           });
