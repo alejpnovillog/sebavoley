@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>UNLAM VS CIUDAD B</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       width: 100%;
       height: 100%;
@@ -96,84 +92,41 @@
   </style>
 </head>
 <body>
-  <!-- Botón para iniciar -->
   <button id="play-button" onclick="startExperience()">▶️ Actuación del jugador 16 de la UNLAM</button>
-
-  <!-- Contador de video -->
-  <div id="video-counter" class="hidden">
-    <span id="current-index">0</span> / <span id="total-videos">0</span>
-  </div>
-
-  <!-- Reproductor de YouTube (pantalla completa) -->
+  <div id="video-counter" class="hidden"><span id="current-index">0</span> / <span id="total-videos">0</span></div>
   <div id="player"></div>
-
-  <!-- Reproductor oculto de SoundCloud -->
   <iframe id="soundcloud-player"
     src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false"
     allow="autoplay">
   </iframe>
-
-  <!-- Efecto de transición circular -->
   <div id="circle-transition"></div>
-
-  <!-- Carga de YouTube Player API -->
   <script src=" https://www.youtube.com/player_api "></script>
 
   <script>
     const videos = [
-      { start: 100,   end: 105 },
-      { start: 149,   end: 153 },
-      { start: 194,   end: 197 },
-      { start: 378,   end: 381 },
-      { start: 694,   end: 699 },
-      { start: 781,   end: 788 },
-      { start: 885,   end: 888 },
-      { start: 1114,  end: 1117 },
-      { start: 1174,  end: 1179 },
-      { start: 1445,  end: 1448 },
-      { start: 1480,  end: 1484 },
-      { start: 1735,  end: 1739 },
-      { start: 2315,  end: 2319 },
-      { start: 2351,  end: 2360 },
-      { start: 2666,  end: 2670 },
-      { start: 2751,  end: 2763 },
-      { start: 2856,  end: 2870 },
-      { start: 2935,  end: 2939 },
-      { start: 3473,  end: 3476 },
-      { start: 3510,  end: 3515 },
-      { start: 3756,  end: 3762 },
-      { start: 3826,  end: 3831 },
-      { start: 3878,  end: 3886 },
-      { start: 4072,  end: 4077 },
-      { start: 4211,  end: 4217 },
-      { start: 4243,  end: 4247 },
-      { start: 4313,  end: 4316 },
-      { start: 4365,  end: 4373 },
-      { start: 4403,  end: 4410 },
-      { start: 4496,  end: 4502 },
-      { start: 4525,  end: 4530 },
-      { start: 4565,  end: 4572 },
-      { start: 4577,  end: 4582 },
-      { start: 4773,  end: 4781 },
-      { start: 4816,  end: 4823 },
-      { start: 5382,  end: 5388 },
-      { start: 5484,  end: 5490 },
-      { start: 5556,  end: 5561 },
-      { start: 5606,  end: 5613 },
-      { start: 5688,  end: 5693 },
-      { start: 5772,  end: 5782 },
-      { start: 5961,  end: 5966 },
-      { start: 6028,  end: 6034 },
-      { start: 6040,  end: 6044 },
-      { start: 6113,  end: 6118 },
-      { start: 6542,  end: 6548 },
+      { start: 100, end: 105 }, { start: 149, end: 153 }, { start: 194, end: 197 },
+      { start: 378, end: 381 }, { start: 694, end: 699 }, { start: 781, end: 788 },
+      { start: 885, end: 888 }, { start: 1114, end: 1117 }, { start: 1174, end: 1179 },
+      { start: 1445, end: 1448 }, { start: 1480, end: 1484 }, { start: 1735, end: 1739 },
+      { start: 2315, end: 2319 }, { start: 2351, end: 2360 }, { start: 2666, end: 2670 },
+      { start: 2751, end: 2763 }, { start: 2856, end: 2870 }, { start: 2935, end: 2939 },
+      { start: 3473, end: 3476 }, { start: 3510, end: 3515 }, { start: 3756, end: 3762 },
+      { start: 3826, end: 3831 }, { start: 3878, end: 3886 }, { start: 4072, end: 4077 },
+      { start: 4211, end: 4217 }, { start: 4243, end: 4247 }, { start: 4313, end: 4316 },
+      { start: 4365, end: 4373 }, { start: 4403, end: 4410 }, { start: 4496, end: 4502 },
+      { start: 4525, end: 4530 }, { start: 4565, end: 4572 }, { start: 4577, end: 4582 },
+      { start: 4773, end: 4781 }, { start: 4816, end: 4823 }, { start: 5382, end: 5388 },
+      { start: 5484, end: 5490 }, { start: 5556, end: 5561 }, { start: 5606, end: 5613 },
+      { start: 5688, end: 5693 }, { start: 5772, end: 5782 }, { start: 5961, end: 5966 },
+      { start: 6028, end: 6034 }, { start: 6040, end: 6044 }, { start: 6113, end: 6118 },
+      { start: 6542, end: 6548 }
     ];
 
     let currentIndex = 0;
     let player;
     let soundCloudIframe;
-    let totalVideos = videos.length;
-    let soundCloudInterval;
+    let soundLoopInterval;
+    const totalVideos = videos.length;
 
     function updateCounter() {
       const currentEl = document.getElementById("current-index");
@@ -196,32 +149,30 @@
     }
 
     function startSoundCloudLoop(durationSeconds = 180) {
-      restartSoundCloud(); // Primera reproducción
-      soundCloudInterval = setInterval(restartSoundCloud, durationSeconds * 1000);
+      restartSoundCloud();
+      soundLoopInterval = setInterval(restartSoundCloud, durationSeconds * 1000);
     }
 
     function startExperience() {
       document.getElementById("play-button").style.display = "none";
-
       requestFullscreen();
 
       soundCloudIframe = document.getElementById("soundcloud-player");
 
+      // Iniciar SoundCloud
       setTimeout(() => {
         if (soundCloudIframe && soundCloudIframe.contentWindow) {
-          console.log("Intentando reproducir SoundCloud y ajustar volumen...");
           soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
           setTimeout(() => {
             soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
-            console.log("Mensajes de play y volumen enviados a SoundCloud.");
           }, 100);
         } else {
-          console.error("SoundCloud iframe o contentWindow no encontrado.");
+          console.error("SoundCloud iframe no encontrado.");
         }
       }, 200);
 
-      // Iniciar loop de música SoundCloud (ajustar duración si es necesario)
-      startSoundCloudLoop(180); // Ajusta este número a la duración real de tu pista en segundos
+      // Reiniciar música cada 180 segundos (ajustable)
+      startSoundCloudLoop(180); // Cambia este valor si tu pista dura más o menos
 
       const circle = document.getElementById("circle-transition");
       circle.classList.add("active");
@@ -290,7 +241,7 @@
           }, 150);
         } else {
           circle.classList.remove("active");
-          setTimeout(() => alert("✅ ¡Todos los videos han sido reproducidos!"), 200);
+          alert("✅ ¡Todos los videos han sido reproducidos!");
         }
       }, 1200);
     }
@@ -298,7 +249,7 @@
     function requestFullscreen() {
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(err => console.log(`Error al intentar pantalla completa: ${err.message} (${err.name})`));
+        elem.requestFullscreen().catch(err => console.log(`Error pantalla completa: ${err.message}`));
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
       } else if (elem.msRequestFullscreen) {
