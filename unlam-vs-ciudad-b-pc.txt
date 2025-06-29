@@ -96,6 +96,7 @@
   </style>
 </head>
 <body>
+
   <!-- Botón para iniciar -->
   <button id="play-button" onclick="startExperience()">▶️ Actuación del jugador 16 de la UNLAM</button>
 
@@ -104,12 +105,12 @@
     <span id="current-index">0</span> / <span id="total-videos">0</span>
   </div>
 
-  <!-- Reproductor de YouTube (pantalla completa) -->
+  <!-- Reproductor de YouTube -->
   <div id="player"></div>
 
-  <!-- Reproductor oculto de SoundCloud -->
+  <!-- Reproductor oculto de SoundCloud (con repeat activado) -->
   <iframe id="soundcloud-player"
-    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false&repeat=1"
     allow="autoplay">
   </iframe>
 
@@ -120,7 +121,7 @@
   <script src=" https://www.youtube.com/player_api "></script>
 
   <script>
-    const videos = [
+    const videos = [    
       { start: 100,   end: 105 },
       { start: 149,   end: 153 },
       { start: 194,   end: 197 },
@@ -173,7 +174,6 @@
     let player;
     let soundCloudIframe;
     let totalVideos = videos.length;
-    let soundCloudInterval;
 
     function updateCounter() {
       const currentEl = document.getElementById("current-index");
@@ -184,25 +184,8 @@
       }
     }
 
-    function restartSoundCloud() {
-      if (soundCloudIframe && soundCloudIframe.contentWindow) {
-        console.log("Reproduciendo nuevamente SoundCloud...");
-        soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'seekTo', value: 0 }), '*');
-        soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
-        setTimeout(() => {
-          soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
-        }, 100);
-      }
-    }
-
-    function startSoundCloudLoop(durationSeconds = 180) {
-      restartSoundCloud(); // Primera reproducción
-      soundCloudInterval = setInterval(restartSoundCloud, durationSeconds * 1000);
-    }
-
     function startExperience() {
       document.getElementById("play-button").style.display = "none";
-
       requestFullscreen();
 
       soundCloudIframe = document.getElementById("soundcloud-player");
@@ -219,9 +202,6 @@
           console.error("SoundCloud iframe o contentWindow no encontrado.");
         }
       }, 200);
-
-      // Iniciar loop de música SoundCloud (ajustar duración si es necesario)
-      startSoundCloudLoop(180); // Ajusta este número a la duración real de tu pista en segundos
 
       const circle = document.getElementById("circle-transition");
       circle.classList.add("active");
@@ -273,10 +253,13 @@
 
     function nextVideo() {
       if (window.nextVideoTimeout) clearTimeout(window.nextVideoTimeout);
+
       const circle = document.getElementById("circle-transition");
       circle.classList.add("active");
+
       setTimeout(() => {
         currentIndex++;
+
         if (currentIndex < videos.length) {
           const current = videos[currentIndex];
           player.loadVideoById({
@@ -285,13 +268,19 @@
             endSeconds: current.end || undefined
           });
           updateCounter();
-          setTimeout(() => {
-            circle.classList.remove("active");
-          }, 150);
         } else {
+          // Detener SoundCloud al finalizar todos los videos
+          if (soundCloudIframe && soundCloudIframe.contentWindow) {
+            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+            console.log("Música pausada, reproducción completada.");
+          }
           circle.classList.remove("active");
           setTimeout(() => alert("✅ ¡Todos los videos han sido reproducidos!"), 200);
         }
+
+        setTimeout(() => {
+          circle.classList.remove("active");
+        }, 150);
       }, 1200);
     }
 
@@ -305,6 +294,24 @@
         elem.msRequestFullscreen();
       }
     }
+
+    // Reiniciar música si termina antes de tiempo
+    window.addEventListener('message', function(e) {
+      const playerOrigin = 'https://w.soundcloud.com ';
+      if (e.origin !== playerOrigin) return;
+
+      let data;
+      try {
+        data = JSON.parse(e.data);
+      } catch (err) {
+        return;
+      }
+
+      if (data.event === 'finish') {
+        console.log("🎶 Canción terminada. Reiniciando...");
+        soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+      }
+    });
   </script>
 </body>
 </html>

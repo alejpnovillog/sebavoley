@@ -1,9 +1,9 @@
 
 
 const videos = [    
-      { start: 1:40,  end: 1:45 },
-      { start: 2:29,  end: 2:33 },
-      { start: 3:14,  end: 3:17 },
+      { start: ,  end:  },
+      { start: ,  end:  },
+      { start: ,  end:  },
       { start: 6:18,  end: 6:21 },
       { start: 11:34, end: 11:39 },
       { start: 13:01, end: 13:08 },
