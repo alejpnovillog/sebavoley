@@ -10,6 +10,7 @@
       margin: 0;
       padding: 0;
     }
+
     html, body {
       width: 100%;
       height: 100%;
@@ -17,6 +18,7 @@
       font-family: Arial, sans-serif;
       background-color: black;
     }
+
     #player {
       position: absolute;
       top: 0;
@@ -27,18 +29,21 @@
       justify-content: center;
       align-items: center;
     }
+
     iframe {
       width: 100%;
       height: 100%;
       border: none;
     }
+
     #soundcloud-player {
       position: absolute;
-      width: 1px;
-      height: 1px;
+      width: 1px; /* Puede ser 0px o incluso display:none si no necesitas visual=true */
+      height: 1px;/* Puede ser 0px o incluso display:none si no necesitas visual=true */
       opacity: 0;
       pointer-events: none;
     }
+
     #play-button {
       position: absolute;
       z-index: 999;
@@ -54,9 +59,12 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     #play-button:hover {
       background-color: #e64d00;
     }
+
+    /* Efecto de transición circular 
     #circle-transition {
       position: fixed;
       top: 50%;
@@ -68,14 +76,36 @@
       border-radius: 50%;
       z-index: 998;
       pointer-events: none;
-      transition: width 3s ease, height 3s ease, opacity 0.5s ease;
+      transition: width 1.2s ease, height 1.2s ease, opacity 0.5s ease;
+      opacity: 0;
+    } */
+     
+
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      /* Modificado aquí: */
+      transition: width 3s ease, height 3s ease, opacity 0.5s ease; /* Todo tarda 3 segundos */
       opacity: 0;
     }
+
+
+
     #circle-transition.active {
       width: 200vw;
       height: 200vh;
       opacity: 1;
     }
+
+    /* Contador de video */
     #video-counter {
       position: absolute;
       top: 20px;
@@ -89,6 +119,7 @@
       z-index: 999;
       transition: opacity 0.4s ease;
     }
+
     #video-counter.hidden {
       opacity: 0;
       pointer-events: none;
@@ -96,6 +127,7 @@
   </style>
 </head>
 <body>
+
   <!-- Botón para iniciar -->
   <button id="play-button" onclick="startExperience()">▶️ Actuación del jugador 16 de la UNLAM</button>
 
@@ -104,22 +136,24 @@
     <span id="current-index">0</span> / <span id="total-videos">0</span>
   </div>
 
-  <!-- Reproductor de YouTube -->
+  <!-- Reproductor de YouTube (pantalla completa) -->
   <div id="player"></div>
 
-  <!-- Reproductor oculto de SoundCloud (con repeat activado) -->
+  <!-- Reproductor oculto de SoundCloud -->
   <iframe id="soundcloud-player"
-    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false&repeat=1"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false"
     allow="autoplay">
   </iframe>
+  <!-- Nota: cambié visual=true a visual=false y agregué otros parámetros para minimizar lo que carga el widget oculto -->
+
 
   <!-- Efecto de transición circular -->
   <div id="circle-transition"></div>
 
   <!-- Carga de YouTube Player API -->
-  <script src=" https://www.youtube.com/player_api "></script>
-
+  <script src="https://www.youtube.com/player_api"></script> <!-- Eliminado espacio extra -->
   <script>
+
     const videos = [    
       { start: 100,   end: 105 },
       { start: 149,   end: 153 },
@@ -189,18 +223,24 @@
 
       soundCloudIframe = document.getElementById("soundcloud-player");
 
+      // Intenta iniciar SoundCloud directamente con la API postMessage
+      // Esto se hace DESPUÉS de la interacción del usuario (el clic en play-button)
+      // Un pequeño timeout para dar tiempo al iframe a estar listo, aunque podría no ser estrictamente necesario
+      // ya que el iframe ya está en el DOM y cargado.
       setTimeout(() => {
         if (soundCloudIframe && soundCloudIframe.contentWindow) {
           console.log("Intentando reproducir SoundCloud y ajustar volumen...");
+          // 1. Iniciar reproducción
           soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+          // 2. Ajustar volumen (después de un breve instante para asegurar que 'play' se procesó)
           setTimeout(() => {
             soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
             console.log("Mensajes de play y volumen enviados a SoundCloud.");
-          }, 100);
+          }, 100); // 100ms de delay para setVolume
         } else {
           console.error("SoundCloud iframe o contentWindow no encontrado.");
         }
-      }, 200);
+      }, 200); // 200ms de delay para el primer comando a SoundCloud
 
       const circle = document.getElementById("circle-transition");
       circle.classList.add("active");
@@ -211,24 +251,25 @@
             videoId: 'EOACeVCXGfI',
             playerVars: {
               autoplay: 1,
-              controls: 1,
+              controls: 1, // Podrías poner 0 si no quieres controles de YouTube visibles
               start: videos[0].start,
               end: videos[0].end || undefined,
               rel: 0,
               fs: 1,
-              playsinline: 1
+              playsinline: 1 // Importante para iOS para evitar que se abra en el reproductor nativo
             },
             events: {
               'onStateChange': onStateChange
             }
           });
         } else {
-          const firstVideo = videos[0];
-          player.loadVideoById({
-            videoId: 'EOACeVCXGfI',
-            startSeconds: firstVideo.start,
-            endSeconds: firstVideo.end || undefined
-          });
+           // Si el player ya existe, solo carga el primer video
+           const firstVideo = videos[0];
+            player.loadVideoById({
+                videoId: 'EOACeVCXGfI',
+                startSeconds: firstVideo.start,
+                endSeconds: firstVideo.end || undefined
+            });
         }
 
         document.getElementById("total-videos").textContent = totalVideos;
@@ -245,20 +286,26 @@
       if (event.data === YT.PlayerState.PLAYING) {
         const currentVideoData = videos[currentIndex];
         const duration = (currentVideoData.end || (currentVideoData.start + player.getDuration())) - currentVideoData.start;
-        if (window.nextVideoTimeout) clearTimeout(window.nextVideoTimeout);
+        
+        // Limpiar cualquier timeout anterior para evitar múltiples llamadas a nextVideo
+        if (window.nextVideoTimeout) {
+            clearTimeout(window.nextVideoTimeout);
+        }
         window.nextVideoTimeout = setTimeout(nextVideo, duration * 1000);
       }
     }
 
     function nextVideo() {
-      if (window.nextVideoTimeout) clearTimeout(window.nextVideoTimeout);
+      // Limpiar el timeout por si acaso se llama manualmente o por otra vía
+      if (window.nextVideoTimeout) {
+            clearTimeout(window.nextVideoTimeout);
+      }
 
       const circle = document.getElementById("circle-transition");
       circle.classList.add("active");
 
       setTimeout(() => {
         currentIndex++;
-
         if (currentIndex < videos.length) {
           const current = videos[currentIndex];
           player.loadVideoById({
@@ -267,19 +314,16 @@
             endSeconds: current.end || undefined
           });
           updateCounter();
+          setTimeout(() => {
+            circle.classList.remove("active");
+          }, 150);
         } else {
-          // Detener SoundCloud al finalizar todos los videos
-          if (soundCloudIframe && soundCloudIframe.contentWindow) {
-            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
-            console.log("Música pausada, reproducción completada.");
-          }
+         
+          // Por ahora, solo quita la transición y muestra alerta
           circle.classList.remove("active");
           setTimeout(() => alert("✅ ¡Todos los videos han sido reproducidos!"), 200);
-        }
 
-        setTimeout(() => {
-          circle.classList.remove("active");
-        }, 150);
+        }
       }, 1200);
     }
 
@@ -287,12 +331,13 @@
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
         elem.requestFullscreen().catch(err => console.log(`Error al intentar pantalla completa: ${err.message} (${err.name})`));
-      } else if (elem.webkitRequestFullscreen) {
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
         elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
+      } else if (elem.msRequestFullscreen) { /* IE11 */
         elem.msRequestFullscreen();
       }
     }
+
   </script>
 </body>
 </html>
