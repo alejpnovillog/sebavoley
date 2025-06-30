@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>UNLAM VS CANGALLO</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+    }
+    #player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    #soundcloud-player {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    #play-button {
+      position: absolute;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: rgba(255, 85, 0, 0.9);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #play-button:hover {
+      background-color: #e64d00;
+    }
+    #circle-transition {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      background-color: black;
+      border-radius: 50%;
+      z-index: 998;
+      pointer-events: none;
+      transition: width 3s ease, height 3s ease, opacity 0.5s ease;
+      opacity: 0;
+    }
+    #circle-transition.active {
+      width: 200vw;
+      height: 200vh;
+      opacity: 1;
+    }
+    #video-counter {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 8px;
+      z-index: 999;
+      transition: opacity 0.4s ease;
+    }
+    #video-counter.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <button id="play-button" onclick="startExperience()">▶️ Actuación del jugador 16 de la UNLAM</button>
+  <div id="video-counter" class="hidden"><span id="current-index">0</span> / <span id="total-videos">0</span></div>
+  <div id="player"></div>
+  <iframe id="soundcloud-player"
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2101629879&auto_play=false&visual=false&show_comments=false&hide_related=true&show_user=false&show_reposts=false&show_teaser=false&buying=false&download=false&sharing=false"
+    allow="autoplay">
+  </iframe>
+  <div id="circle-transition"></div>
+  <script src=" https://www.youtube.com/player_api "></script>
+
+  <script>
+
+    const videos = [
+      { start: 414, end: 418 },   // 6:54 - 6:58
+      { start: 569, end: 576 },   // 9:29 - 9:36
+      { start: 766, end: 772 },   // 12:46 - 12:52
+      { start: 806, end: 815 },   // 13:26 - 13:35
+      { start: 1252, end: 1262 }, // 20:52 - 21:02
+      { start: 1291, end: 1296 }, // 21:31 - 21:36
+      { start: 1347, end: 1353 }, // 22:27 - 22:33
+      { start: 1657, end: 1663 }, // 27:37 - 27:43
+      { start: 1714, end: 1721 }, // 28:34 - 28:41
+      { start: 1986, end: 1998 }, // 33:06 - 33:18
+      { start: 2146, end: 2165 }, // 35:46 - 36:05
+      { start: 2235, end: 2241 }, // 37:15 - 37:21
+      { start: 3240, end: 3245 }, // 54:00 - 54:05
+      { start: 3449, end: 3455 }, // 57:29 - 57:35
+      { start: 3661, end: 3672 }, // 1:01:01 - 1:01:12
+      { start: 4789, end: 4795 }, // 1:19:49 - 1:19:55
+      { start: 5197, end: 5202 }, // 1:26:37 - 1:26:42
+      { start: 5262, end: 5266 }, // 1:27:42 - 1:27:46
+      { start: 6038, end: 6043 }, // 1:40:38 - 1:40:43
+      { start: 5721, end: 5726 }, // 1:35:21 - 1:35:26
+      { start: 5778, end: 5783 }, // 1:36:18 - 1:36:23
+      { start: 6102, end: 6107 }, // 1:41:42 - 1:41:47
+      { start: 6207, end: 6215 }, // 1:43:27 - 1:43:35
+      { start: 6339, end: 6344 }, // 1:45:39 - 1:45:44
+      { start: 6775, end: 6779 }, // 1:52:55 - 1:52:59
+      { start: 6924, end: 6929 }, // 1:55:24 - 1:55:29
+      { start: 6981, end: 6986 }, // 1:56:21 - 1:56:26
+      { start: 6983, end: 6988 }, // 1:56:53 - 1:56:58
+      { start: 7281, end: 7284 }, // 2:01:21 - 2:01:24
+      { start: 7586, end: 7588 }, // 2:06:26 - 2:06:28
+      { start: 7743, end: 7752 }, // 2:09:03 - 2:09:12
+      { start: 8682, end: 8686 }, // 2:24:42 - 2:24:46
+      { start: 8754, end: 8758 }, // 2:25:54 - 2:25:58
+      { start: 9065, end: 9070 }, // 2:31:05 - 2:31:10
+    ];
+
+    let currentIndex = 0;
+    let player;
+    let soundCloudIframe;
+    let soundLoopInterval;
+    const totalVideos = videos.length;
+
+    function updateCounter() {
+      const currentEl = document.getElementById("current-index");
+      const totalEl = document.getElementById("total-videos");
+      if (currentEl && totalEl) {
+        currentEl.textContent = currentIndex + 1;
+        totalEl.textContent = totalVideos;
+      }
+    }
+
+    function restartSoundCloud() {
+      if (soundCloudIframe && soundCloudIframe.contentWindow) {
+        console.log("Reproduciendo nuevamente SoundCloud...");
+        soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'seekTo', value: 0 }), '*');
+        soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+        setTimeout(() => {
+          soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
+        }, 100);
+      }
+    }
+
+    function startSoundCloudLoop(durationSeconds = 180) {
+      restartSoundCloud();
+      soundLoopInterval = setInterval(restartSoundCloud, durationSeconds * 1000);
+    }
+
+    function startExperience() {
+      document.getElementById("play-button").style.display = "none";
+      requestFullscreen();
+
+      soundCloudIframe = document.getElementById("soundcloud-player");
+
+      // Iniciar SoundCloud
+      setTimeout(() => {
+        if (soundCloudIframe && soundCloudIframe.contentWindow) {
+          soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+          setTimeout(() => {
+            soundCloudIframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 30 }), '*');
+          }, 100);
+        } else {
+          console.error("SoundCloud iframe no encontrado.");
+        }
+      }, 200);
+
+      // Reiniciar música cada 180 segundos (ajustable)
+      startSoundCloudLoop(180); // Cambia este valor si tu pista dura más o menos
+
+      const circle = document.getElementById("circle-transition");
+      circle.classList.add("active");
+
+      setTimeout(() => {
+        if (!player) {
+          player = new YT.Player('player', {
+            videoId: 'wGBI7CuKdPw',
+            playerVars: {
+              autoplay: 1,
+              controls: 1,
+              start: videos[0].start,
+              end: videos[0].end || undefined,
+              rel: 0,
+              fs: 1,
+              playsinline: 1
+            },
+            events: {
+              'onStateChange': onStateChange
+            }
+          });
+        } else {
+          const firstVideo = videos[0];
+          player.loadVideoById({
+            videoId: 'wGBI7CuKdPw',
+            startSeconds: firstVideo.start,
+            endSeconds: firstVideo.end || undefined
+          });
+        }
+
+        document.getElementById("total-videos").textContent = totalVideos;
+        document.getElementById("video-counter").classList.remove("hidden");
+        updateCounter();
+
+        setTimeout(() => {
+          circle.classList.remove("active");
+        }, 150);
+      }, 1200);
+    }
+
+    function onStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        const currentVideoData = videos[currentIndex];
+        const duration = (currentVideoData.end || (currentVideoData.start + player.getDuration())) - currentVideoData.start;
+        if (window.nextVideoTimeout) clearTimeout(window.nextVideoTimeout);
+        window.nextVideoTimeout = setTimeout(nextVideo, duration * 1000);
+      }
+    }
+
+    function nextVideo() {
+      if (window.nextVideoTimeout) clearTimeout(window.nextVideoTimeout);
+      const circle = document.getElementById("circle-transition");
+      circle.classList.add("active");
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < videos.length) {
+          const current = videos[currentIndex];
+          player.loadVideoById({
+            videoId: 'wGBI7CuKdPw',
+            startSeconds: current.start,
+            endSeconds: current.end || undefined
+          });
+          updateCounter();
+          setTimeout(() => {
+            circle.classList.remove("active");
+          }, 150);
+        } else {
+          circle.classList.remove("active");
+          alert("✅ ¡Todos los videos han sido reproducidos!");
+        }
+      }, 1200);
+    }
+
+    function requestFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => console.log(`Error pantalla completa: ${err.message}`));
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
