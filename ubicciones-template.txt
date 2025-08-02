@@ -1,26 +1,84 @@
 
 
 const videos = [    
-      { start: 6:15,  end:  6:19}, -- 1
-      { start: 15:01,  end:  15:05}, -- 1
-      { start: 35:09,  end:  35:15}, -- 1
-      { start: 36:21,  end:  36:25}, -- 1 
-      { start: 42:15,  end:  42:20}, -- 1
-      { start: 48:22,  end:  48:27}, -- 1
-      { start: 53:01,  end:  53:23}, -- 0
-      { start: 54:04,  end:  54:08}, -- 1
-      { start: 1:00:29,  end:  1:00:35}, -- 1
-      { start: 1:00:59,  end:  1:01:03}, -- 1
-      { start: 1:05:54,  end:  1:06:07}, -- 1
-      { start: 1:07:59,  end:  1:08:04}, -- 1
-      { start: 1:12:04,  end:  1:12:09}, -- 1
-      { start: 1:19:13,  end:  1:19:16}, -- 1
-      { start: 1:20:00,  end:  1:20:03}, -- 1
-      { start: 1:20:46,  end:  1:20:49}, -- 1
-      { start: 1:24:03,  end:  1:24:07}, -- 1
+      { start: 8:31,  end:  }, -- 1
+      { start: 13:11,  end:  13:16}, -- 1
+      { start: 21:17,  end:  21:23}, -- 1
+      { start: 23:05,  end:  23:09}, -- 1 
+      { start: 34:32,  end:  34:37}, -- 1
+      { start: 35:41,  end:  35:46}, -- 1
+      { start: 36:48,  end:  36:53}, -- 1
+      { start: 45:27,  end:  45:36}, -- 1
+      { start: 55:23,  end:  55:28}, -- 1
+      { start: 57:58,  end:  58:06}, -- 1
+      { start: 1:02:05,  end:  1:02:10}, -- 1
+      { start: 1:06:07,  end:  1:06:11}, -- 1
+      { start: 1:13:53,  end:  1:14:00}, -- 1
+      { start: 1:17:23,  end:  1:17:36}, -- 1
+      { start: 1:18:45,  end:  1:18:49}, -- 1
+      { start: 1:33:54,  end:  1:33:59}, -- 1
+      { start: 1:34:28,  end:  1:34:40}, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1 
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 0
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1 
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 0
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1 
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 0
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
+      { start: ,  end:  }, -- 1
 ];
 
-C0w2Tty0F0o
+
+wHYzdbLzGlI
 
 const videos = [
   { start: 375, end: 379 },       // 6:15 - 6:19
