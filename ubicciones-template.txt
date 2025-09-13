@@ -88,7 +88,7 @@ const videos = [
       { start: 22:07,  end: 22:10}, -- 1
       { start: 24:09,  end: 24:13}, -- 1
       { start: 29:34,  end: 29:38}, -- 1
-      { start: 31:16,  end: 32:20}, -- 1
+      { start: 31:16,  end: 31:20}, -- 1
       { start: 36:45,  end: 36:51}, -- 1
       { start: 38:30,  end: 38:35}, -- 1
       { start: 39:14,  end: 39:21}, -- 1
